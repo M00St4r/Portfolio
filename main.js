@@ -1,7 +1,7 @@
 //import './style.css'
-//import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js'
-import * as THREE from 'three';
-import { OrbitControls } from 'node_modules/three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js'
+//import * as THREE from 'three';
+//import { OrbitControls } from 'node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
@@ -16,7 +16,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 camera.position.setZ(30);
 renderer.render( scene, camera );
 
-const controls = new OrbitControls( camera, renderer.domElement );
+//const controls = new OrbitControls( camera, renderer.domElement );
 //const loader = new GLTFLoader();
 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );

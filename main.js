@@ -26,14 +26,15 @@ const dracoLoader = new DRACOLoader();
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshStandardMaterial( { color: 0x420420 } ); //MeshBasicMaterial = no Light interaction, MeshStandardMaterial = light interaction
 const cube = new THREE.Mesh( geometry, material );
-
+cube.position.y = 2;
 scene.add( cube );
 
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(3,3,3);
+pointLight.position.set(3,2,3);
 pointLight.power = 10000;
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
+ambientLight.power = 1000;
 
 scene.add(pointLight, ambientLight);
 

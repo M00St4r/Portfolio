@@ -1,8 +1,8 @@
 //import './style.css'
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js'
-//import * as THREE from 'three';
-//import { OrbitControls } from 'node_modules/three/examples/jsm/controls/OrbitControls.js';
-//import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+//import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js'
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -16,8 +16,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 camera.position.setZ(30);
 renderer.render( scene, camera );
 
-//const controls = new OrbitControls( camera, renderer.domElement );
-//const loader = new GLTFLoader();
+const controls = new OrbitControls( camera, renderer.domElement );
+const loader = new GLTFLoader();
 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshStandardMaterial( { color: 0x420420 } ); //MeshBasicMaterial = no Light interaction, MeshStandardMaterial = light interaction

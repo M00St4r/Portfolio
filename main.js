@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -20,6 +21,7 @@ renderer.render( scene, camera );
 
 const controls = new OrbitControls( camera, renderer.domElement );
 const gltfloader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshStandardMaterial( { color: 0x420420 } ); //MeshBasicMaterial = no Light interaction, MeshStandardMaterial = light interaction
@@ -64,20 +66,59 @@ addBG();
 
 const loader = new FontLoader();
 
-loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+loader.load( 'assets/helvetiker_regular.typeface.json', function ( font ) {
 
-	const geometry = new TextGeometry( 'Hello three.js!', {
+	const textGeometry = new TextGeometry( 'B j o r n  M a r t e n s', {
 		font: font,
-		size: 80,
-		depth: 5,
+		size: 1,
+		depth: 0.2,
 		curveSegments: 12,
 		bevelEnabled: true,
-		bevelThickness: 10,
-		bevelSize: 8,
+		bevelThickness: 0.2,
+		bevelSize: 0.2,
 		bevelOffset: 0,
-		bevelSegments: 5
+		bevelSegments: 10
 	} );
+
+  var textMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  var mesh = new THREE.Mesh(textGeometry, textMaterial);
+
+  //scene.add(mesh);
 } );
+
+
+dracoLoader.setDecoderPath( '/examples/jsm/libs/draco/' );
+gltfloader.setDRACOLoader( dracoLoader );
+
+// Load a glTF resource
+gltfloader.load(
+	// resource URL
+	'assets/text.glb',
+	// called when the resource is loaded
+	function ( gltf ) {
+
+		scene.add( gltf.scene );
+
+		gltf.animations; // Array<THREE.AnimationClip>
+		gltf.scene; // THREE.Group
+		gltf.scenes; // Array<THREE.Group>
+		gltf.cameras; // Array<THREE.Camera>
+		gltf.asset; // Object
+
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+	},
+	// called when loading has errors
+	function ( error ) {
+
+		console.log( 'An error happened' );
+
+	}
+);
 
 function animate(){
   requestAnimationFrame(animate);

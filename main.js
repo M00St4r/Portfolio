@@ -36,6 +36,9 @@ pointLight.power = 10000;
 const ambientLight = new THREE.AmbientLight(0xffffff);
 ambientLight.power = 1000;
 
+//const directionalLight = new THREE.DirectionalLight(0xffffff);
+//directionalLight.power = 1000;
+
 scene.add(pointLight, ambientLight);
 
 const lightHelper = new THREE.PointLightHelper(pointLight);

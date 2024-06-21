@@ -6,7 +6,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -97,7 +97,7 @@ loader.load( 'assets/helvetiker_regular.typeface.json', function ( font ) {
 dracoLoader.setDecoderPath( '/examples/jsm/libs/draco/' );
 gltfloader.setDRACOLoader( dracoLoader );
 
-// Load a glTF resource
+/*// Load a glTF resource
 gltfloader.load(
 	// resource URL
 	'assets/text.glb',
@@ -125,7 +125,27 @@ gltfloader.load(
 		console.log( 'An error happened' );
 
 	}
-);
+);*/
+
+objloader.load('assets/magmaball.obj', (object) => {
+	//create material from textures
+	const material = new THREE.MeshPhongMaterial({
+		map: textureloader.load("assets/Material/Diffusee.png"),
+		emissiveMap: textureloader.load("assets/Material/Emmit.png"),
+		normalMap: textureloader.load("assets/Material/Normal.png"),
+		//emissiveIntensity: 1.0
+		
+	});
+
+	// For any meshes in the model, add our material.
+	object.traverse( function ( node ) {
+
+		if ( node.isMesh ) node.material = material;
+	
+	  } );
+
+	scene.add(object);
+  });
 
 function animate(){
   requestAnimationFrame(animate);

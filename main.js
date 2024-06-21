@@ -22,6 +22,7 @@ renderer.render( scene, camera );
 const controls = new OrbitControls( camera, renderer.domElement );
 const gltfloader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
+const textureloader = new THREE.TextureLoader();
 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshStandardMaterial( { color: 0x420420 } ); //MeshBasicMaterial = no Light interaction, MeshStandardMaterial = light interaction

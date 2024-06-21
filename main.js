@@ -127,13 +127,13 @@ gltfloader.load(
 	}
 );*/
 
-objloader.load('assets/magmaball.obj', (object) => {
+/*objloader.load('assets/magmaball.obj', (object) => {
 	//create material from textures
 	const material = new THREE.MeshPhongMaterial({
-		map: textureloader.load("assets/Material/Diffusee.png"),
+		map: textureloader.load("assets/Material/Diffuse.png"),
 		emissiveMap: textureloader.load("assets/Material/Emmit.png"),
 		normalMap: textureloader.load("assets/Material/Normal.png"),
-		//emissiveIntensity: 1.0
+		emissiveIntensity: 1.0
 		
 	});
 
@@ -145,7 +145,51 @@ objloader.load('assets/magmaball.obj', (object) => {
 	  } );
 
 	scene.add(object);
-  });
+  });*/
+
+gltfloader.load('assets/magmaball.glb', (gltf) => {
+
+	const model = gltf.scene;
+  	//const mesh = model.children[0].geometry;
+
+	//create material from textures
+	const material = new THREE.MeshPhongMaterial({
+		emissiveMap: textureloader.load("assets/Material/Emmit.png"),
+		map: textureloader.load("assets/Material/Diffuse.png"),
+		normalMap: textureloader.load("assets/Material/Normal.png"),
+		emissiveIntensity: 10.0,
+		reflectivity: 1,
+		normalScale: new THREE.Vector2(1,1),
+	});
+
+	model.traverse(function (child) {
+
+		if (child.isMesh) {
+
+			child.material = material;
+
+		}
+
+	});
+
+	/*// For any meshes in the model, add our material.
+	object.traverse( function ( node ) {
+		if ( node.isMesh ) node.material = material;
+	});*/
+	//mesh.material = material;
+	
+	scene.add(model);
+});
+
+/*/ Load the GLTF model
+const loader = new THREE.GLTFLoader();
+loader.load('model.gltf', (gltf) => {
+  const model = gltf.scene;
+  const mesh = model.children[0].geometry;
+  const texture = new THREE.TextureLoader().load('texture.png');
+  const material = new THREE.MeshBasicMaterial({ map: texture });
+  mesh.material = material;
+});*/
 
 function animate(){
   requestAnimationFrame(animate);

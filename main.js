@@ -7,33 +7,35 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#bg'),
+	canvas: document.querySelector('#bg'),
 });
 
-renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
-renderer.render( scene, camera );
+renderer.render(scene, camera);
 
-const controls = new OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls(camera, renderer.domElement);
 const gltfloader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
 const textureloader = new THREE.TextureLoader();
-const objloader = new OBJLoader();
+const objLoader = new OBJLoader();
+const mtlLoader = new MTLLoader();
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshStandardMaterial( { color: 0x420420 } ); //MeshBasicMaterial = no Light interaction, MeshStandardMaterial = light interaction
-const cube = new THREE.Mesh( geometry, material );
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshStandardMaterial({ color: 0x420420 }); //MeshBasicMaterial = no Light interaction, MeshStandardMaterial = light interaction
+const cube = new THREE.Mesh(geometry, material);
 cube.position.y = 2;
-scene.add( cube );
+scene.add(cube);
 
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(3,2,3);
+pointLight.position.set(3, 2, 3);
 pointLight.power = 10000;
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -47,35 +49,35 @@ scene.add(pointLight, ambientLight);
 const lightHelper = new THREE.PointLightHelper(pointLight);
 scene.add(lightHelper);
 
-function addStar(){
-  const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-  const material = new THREE.MeshStandardMaterial({color: 0xffffff});
-  const star = new THREE.Mesh(geometry, material);
+function addStar() {
+	const geometry = new THREE.SphereGeometry(0.25, 24, 24);
+	const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+	const star = new THREE.Mesh(geometry, material);
 
-  const [x,y,z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(100));
+	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
 
-  star.position.set(x,y,z);
-  scene.add(star);
+	star.position.set(x, y, z);
+	scene.add(star);
 }
 
 Array(200).fill().forEach(addStar);
 
 const worldMap = new THREE.TextureLoader().load('assets/AtmosEarth.png');
 
-function addBG(){
-  const geometry = new THREE.SphereGeometry(30,24,24);
-  var material = new THREE.MeshBasicMaterial({map: worldMap, side: THREE.BackSide})
-  const worldBg = new THREE.Mesh(geometry, material);
-  scene.add(worldBg);
+function addBG() {
+	const geometry = new THREE.SphereGeometry(30, 24, 24);
+	var material = new THREE.MeshBasicMaterial({ map: worldMap, side: THREE.BackSide })
+	const worldBg = new THREE.Mesh(geometry, material);
+	scene.add(worldBg);
 }
 
 addBG();
 
 const loader = new FontLoader();
 
-loader.load( 'assets/helvetiker_regular.typeface.json', function ( font ) {
+loader.load('assets/helvetiker_regular.typeface.json', function (font) {
 
-	const textGeometry = new TextGeometry( 'B j o r n  M a r t e n s', {
+	const textGeometry = new TextGeometry('B j o r n  M a r t e n s', {
 		font: font,
 		size: 1,
 		depth: 0.2,
@@ -85,17 +87,17 @@ loader.load( 'assets/helvetiker_regular.typeface.json', function ( font ) {
 		bevelSize: 0.2,
 		bevelOffset: 0,
 		bevelSegments: 10
-	} );
+	});
 
-  var textMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-  var mesh = new THREE.Mesh(textGeometry, textMaterial);
+	var textMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+	var mesh = new THREE.Mesh(textGeometry, textMaterial);
 
-  //scene.add(mesh);
-} );
+	//scene.add(mesh);
+});
 
 
-dracoLoader.setDecoderPath( '/examples/jsm/libs/draco/' );
-gltfloader.setDRACOLoader( dracoLoader );
+dracoLoader.setDecoderPath('/examples/jsm/libs/draco/');
+gltfloader.setDRACOLoader(dracoLoader);
 
 /*// Load a glTF resource
 gltfloader.load(
@@ -147,10 +149,24 @@ gltfloader.load(
 	scene.add(object);
   });*/
 
-gltfloader.load('assets/magmaball.glb', (gltf) => {
+objLoader.load('assets/magmaball.obj', (obj) => {
+	mtlLoader.load('assets/magmaball.mtl', (materials) => {
+		// Combine the OBJ and MTL data
+		/*const mesh = obj.traverse((child) => {
+			if (child instanceof THREE.Mesh) {
+				child.material = materials.materials[child.material];
+			}
+		});*/
+		objLoader.MeshStandardMaterial = materials;
+		// Add the mesh to the scene
+		scene.add(obj);
+	});
+});
+
+/*gltfloader.load('assets/magmaball.glb', (gltf) => {
 
 	const model = gltf.scene;
-  	//const mesh = model.children[0].geometry;
+	//const mesh = model.children[0].geometry;
 
 	//create material from textures
 	const material = new THREE.MeshPhongMaterial({
@@ -159,7 +175,7 @@ gltfloader.load('assets/magmaball.glb', (gltf) => {
 		normalMap: textureloader.load("assets/Material/Normal.png"),
 		emissiveIntensity: 10.0,
 		reflectivity: 1,
-		normalScale: new THREE.Vector2(1,1),
+		normalScale: new THREE.Vector2(1, 1),
 	});
 
 	model.traverse(function (child) {
@@ -170,18 +186,12 @@ gltfloader.load('assets/magmaball.glb', (gltf) => {
 
 		}
 
+		scene.add(model);
 	});
 
-	/*// For any meshes in the model, add our material.
-	object.traverse( function ( node ) {
-		if ( node.isMesh ) node.material = material;
-	});*/
-	//mesh.material = material;
-	
-	scene.add(model);
-});
+});*/
 
-/*/ Load the GLTF model
+/* Load the GLTF model
 const loader = new THREE.GLTFLoader();
 loader.load('model.gltf', (gltf) => {
   const model = gltf.scene;
@@ -191,14 +201,14 @@ loader.load('model.gltf', (gltf) => {
   mesh.material = material;
 });*/
 
-function animate(){
-  requestAnimationFrame(animate);
+function animate() {
+	requestAnimationFrame(animate);
 
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  
+	cube.rotation.x += 0.01;
+	cube.rotation.y += 0.01;
 
-  renderer.render(scene, camera);
+
+	renderer.render(scene, camera);
 }
 
 animate();

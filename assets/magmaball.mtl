@@ -10,6 +10,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
-map_Bump Material\\Normal.png
-map_Kd Material\\Diffuse.png
-map_Ke Material\\Emmit.png
+map_Bump assets\\Material\\Normal.png
+map_Kd assets\\Material\\Diffuse.png
+map_Ke assets\\Material\\Emmit.png

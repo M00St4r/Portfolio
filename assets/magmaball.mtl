@@ -10,6 +10,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
-map_Bump C:\\Users\\bjoern\\Documents\\magmaball\\MaterialwithUV\\Normal.png
-map_Kd C:\\Users\\bjoern\\Documents\\magmaball\\MaterialwithUV\\Diffuse.png
-map_Ke C:\\Users\\bjoern\\Documents\\magmaball\\MaterialwithUV\\Emmit.png
+map_Bump Material\\Normal.png
+map_Kd Material\\Diffuse.png
+map_Ke Material\\Emmit.png

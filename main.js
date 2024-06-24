@@ -152,11 +152,11 @@ gltfloader.load(
 objLoader.load('assets/magmaball.obj', (obj) => {
 	mtlLoader.load('assets/magmaball.mtl', (materials) => {
 		// Combine the OBJ and MTL data
-		const mesh = obj.traverse((child) => {
+		/*const mesh = obj.traverse((child) => {
 			if (child instanceof THREE.Mesh) {
 				child.material = materials.materials[child.material];
 			}
-		});
+		});*/
 		objLoader.MeshStandardMaterial = materials;
 		// Add the mesh to the scene
 		scene.add(obj);
